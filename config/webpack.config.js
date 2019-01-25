@@ -334,9 +334,9 @@ module.exports = function (webpackEnv) {
                                 customize: require.resolve(
                                     'babel-preset-react-app/webpack-overrides'
                                 ),
-                                query: {
-                                    presets: ['es2015', 'react']
-                                },
+                                presets: [
+                                    '@babel/react', '@babel/preset-env'
+                                ],
                                 plugins: [
                                     [
                                         require.resolve('babel-plugin-named-asset-import'),

@@ -1,7 +1,6 @@
 import * as types from '../constants/ActionTypes';
 
 const app = (state = [], action) => {
-    let server;
     switch (action.type) {
         case types.SERVERS_GET_REQUEST:
             return {

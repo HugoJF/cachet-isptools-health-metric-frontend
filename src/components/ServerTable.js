@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
+import NumberDirection from "./NumberDirection";
 
 class ServerTable extends Component {
 
@@ -10,27 +11,41 @@ class ServerTable extends Component {
         if (this.props.servers) {
             tableData = this.props.servers.map((server) => (
                 <tr>
-                    <td>{server.id}</td>
+                    <td className={server.status ? 'success' : 'danger'}>{server.status ? 'Online' : 'Offline'}</td>
                     <td dangerouslySetInnerHTML={{__html: server.name}}></td>
-                    <td>{server.url}</td>
-                    <td>{parseFloat(server.ping).toFixed(2)} ± {parseFloat(server.jitter).toFixed(2)}</td>
-                    <td>{server.abnormal ? 'ABNORMAL' : 'Normal'}</td>
-                    <td><Link to={'server/' + server.id}>Details</Link></td>
+                    <td><code>{server.url}</code></td>
+                    <td>
+                        <NumberDirection value={server.ping}/>
+                        <strong>{parseFloat(server.ping).toFixed(2)}ms</strong>
+                        <span> ± </span>
+                        <small>{parseFloat(server.jitter).toFixed(2)}</small>
+                        <NumberDirection value={server.jitter}/>
+                    </td>
+                    <td>
+                        <NumberDirection value={server.loss}/>
+                        <strong>{parseFloat(server.loss * 100).toFixed(1)}%</strong>
+                        <small> ({server.pings} attempts)</small>
+                    </td>
+                    <td>{server.abnormal ? '⛔' : '✅'}</td>
+                    <td>
+                        <Link to={'server/' + server.id}>Details</Link>
+                    </td>
                 </tr>
             ))
         } else {
             tableData = <tr>
-                <td colSpan={4}>Empty table</td>
+                <td colSpan={7}>{this.props.loading ? 'Loading data...' : 'Empty table'}</td>
             </tr>;
         }
         return (
-            <table border="1px solid black" cellPadding={2}>
+            <table style={{textAlign: 'center', width: '100%'}} border="1px solid black" cellPadding={1}>
                 <thead>
                 <tr>
-                    <th>Server ID</th>
-                    <th>Server Name</th>
-                    <th>Server URL</th>
+                    <th>Status</th>
+                    <th>Name</th>
+                    <th>URL</th>
                     <th>Ping (jitter)</th>
+                    <th>Loss</th>
                     <th>State</th>
                     <th>Actions</th>
                 </tr>

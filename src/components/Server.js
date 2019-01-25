@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
-import {Sparklines} from "react-sparklines/src/Sparklines";
-import SparklinesLine from "react-sparklines/src/SparklinesLine";
+import PingGraph from "./PingGraph";
 
 class Server extends Component {
 
@@ -22,9 +21,19 @@ class Server extends Component {
             this.loadData();
         }
 
-        if (!this.props.pings || this.props.pings.length == 0) {
+        if (!this.props.pings || !this.props.pings[this.getId()] || this.props.pings[this.getId()].length === 0) {
             this.requestPings();
         }
+    }
+
+    componentDidMount() {
+        this.timer = setInterval(() => {
+            this.requestPings()
+        }, 5000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer);
     }
 
     render() {
@@ -49,8 +58,9 @@ class Server extends Component {
             }
         }
 
+        console.log(pings);
         return (
-            <div>
+            <div style={{textAlign: 'center'}}>
                 {server !== undefined ?
                     <div>
                         <Link to='/'>Back to list</Link>
@@ -58,22 +68,24 @@ class Server extends Component {
                         <p><strong>Server ID: </strong> {server.id}</p>
                         <p><strong>Server Name: </strong><span dangerouslySetInnerHTML={{__html: server.name}}></span></p>
                         <p><strong>Server URL: </strong> <a href={'http://' + server.url}>{server.url}</a></p>
-                        <p><strong>Server Ping: </strong> {parseFloat(server.ping).toFixed(2)}±{parseFloat(server.jitter).toFixed(2)}</p>
+                        <p><strong>Server Ping: </strong> {parseFloat(server.ping).toFixed(2)} ± {parseFloat(server.jitter).toFixed(2)}</p>
 
-                        <h3>Pings</h3>
+                        <h2>Pings</h2>
 
-                        <Sparklines data={[5, 10, 5, 20, 8, 15]} limit={5} width={100} height={20} margin={5}>
-                            <SparklinesLine />
-                        </Sparklines>
-                        <p>Status: {pings ? pings.status : '...'}</p>
-                        {pings ?
-                            pings.data.map((ping) =>
-                                (<span>{ping}ms, </span>)
-                            )
-                            :
-                            <p>Empty</p>
+                        <p><strong>Status:</strong> {pings ? pings.status : '...'}</p>
+                        <p><strong>Count:</strong> {pings ? (pings.data ? pings.data.length : '0') : '0'}</p>
+                        {
+                            (pings) ?
+                                <PingGraph
+                                    min={0}
+                                    max={100}
+                                    width={250}
+                                    height={50}
+                                    data={pings.data}
+                                />
+                                :
+                                <p>missing data</p>
                         }
-
                     </div>
                     :
                     <p>Could not find server information</p>

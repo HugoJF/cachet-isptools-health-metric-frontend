@@ -11,7 +11,7 @@ const app = (state = [], action) => {
                 ...state,
                 ...{
                     [action.id]: {
-                        data: [],
+                        data: state[action.id] ? state[action.id].data : undefined,
                         status: 'Loading',
                         loading: true,
                     }

@@ -18,8 +18,8 @@ ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
-                <Route exact path='/' component={App}/>
                 <Route path='/server/:id' component={Server} />
+                <Route component={App}/>
             </Switch>
         </BrowserRouter>
     </Provider>

@@ -44,17 +44,29 @@ button:hover {
     text-decoration-line: underline;
 }
 
-.success-color {
+.table {
+    text-align: center;
+    width: 100%;
+}
+
+.app {
+    width: 1500px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.success {
     color: #1b6d17;
 }
-.success {
+
+.bg-success {
     background-color: #1b6d17;
 }
 
-.danger-color {
+.danger {
     color: #691313;
 }
 
-.danger {
+.bg-danger {
     background-color: #691313;
 }

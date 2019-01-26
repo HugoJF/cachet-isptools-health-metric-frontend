@@ -31,6 +31,7 @@ const app = (state = [], action) => {
             return {
                 ...state,
                 ...{
+                    time: (new Date()).getTime(),
                     data: action.data,
                     serversWithProblems: serversWithProblems,
                     serverProblems: serverProblems,

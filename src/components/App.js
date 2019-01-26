@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import '../styles/App.css';
 import ServerTable from "./ServerTable";
-import NumberDirection from "./NumberDirection";
 import PingGraph from "./PingGraph";
+import {NumberDirection} from "../containers/NumberDirectionContainer";
 
 class App extends Component {
     componentWillMount() {
@@ -46,15 +46,18 @@ class App extends Component {
 
     render() {
         return (
-            <div style={{width: '1500px', textAlign: 'center', margin: '0 auto'}} className="App">
+            <div className="app">
+                {/* Header  */}
                 <h1>Server Health Monitoring Dashboard</h1>
                 <p>Status: {this.props.status}</p>
                 <button onClick={this.loadData.bind(this)}>Refresh</button>
 
+                {/* Abnormal server counter */}
                 <h3>Servers with problems: {this.props.serversWithProblems}
                     <NumberDirection value={this.props.serversWithProblems}/>
                 </h3>
 
+                {/* Abnormal servers history */}
                 <p>
                     <PingGraph
                         min={0}
@@ -64,6 +67,8 @@ class App extends Component {
                         data={this.props.serverProblems}
                     />
                 </p>
+
+                {/* Server information table */}
                 <ServerTable loading={this.props.loading} servers={this.props.data} />
             </div>
         );

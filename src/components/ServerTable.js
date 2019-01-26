@@ -4,20 +4,26 @@ import ServerTableRow from "./ServerTableRow";
 class ServerTable extends Component {
 
 
-    render() {
-        let tableData;
-        console.log(this.props.servers);
+    buildTable() {
         if (this.props.servers) {
-            tableData = this.props.servers.map((server) => (
-                <ServerTableRow server={server} colSpan={7}/>
-            ))
+            return (
+                this.props.servers.map((server) => (
+                    <ServerTableRow server={server} colSpan={7}/>
+                ))
+            )
         } else {
-            tableData = <tr>
-                <td colSpan={7}>{this.props.loading ? 'Loading data...' : 'Empty table'}</td>
-            </tr>;
+            return (
+                <tr>
+                    <td colSpan={7}>{this.props.loading ? 'Loading data...' : 'Empty table'}</td>
+                </tr>
+            );
         }
+    }
+
+
+    render() {
         return (
-            <table style={{textAlign: 'center', width: '100%'}} border="1px solid black" cellPadding={1}>
+            <table className={'table'} border="1px">
                 <thead>
                 <tr>
                     <th>Status</th>
@@ -30,7 +36,7 @@ class ServerTable extends Component {
                 </tr>
                 </thead>
                 <tbody>
-                {tableData}
+                {this.buildTable()}
                 </tbody>
             </table>
         );

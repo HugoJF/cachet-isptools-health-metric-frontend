@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 import PingGraph from "./PingGraph";
+import PingWithJitter from "./PingWithJitter";
 
 class Server extends Component {
 
@@ -37,7 +38,6 @@ class Server extends Component {
     }
 
     render() {
-        console.log('render');
         let server = undefined;
         let pings = [];
 
@@ -63,15 +63,20 @@ class Server extends Component {
             <div style={{textAlign: 'center'}}>
                 {server !== undefined ?
                     <div>
+                        {/* Back link */}
                         <Link to='/'>Back to list</Link>
 
+                        {/* Basic information */}
                         <p><strong>Server ID: </strong> {server.id}</p>
                         <p><strong>Server Name: </strong><span dangerouslySetInnerHTML={{__html: server.name}}></span></p>
                         <p><strong>Server URL: </strong> <a href={'http://' + server.url}>{server.url}</a></p>
-                        <p><strong>Server Ping: </strong> {parseFloat(server.ping).toFixed(2)} ± {parseFloat(server.jitter).toFixed(2)}</p>
+                        <p>
+                            <strong>Server Ping: </strong>
+                            <PingWithJitter server={server}/>
+                        </p>
 
+                        {/* Ping information and history */}
                         <h2>Pings</h2>
-
                         <p><strong>Status:</strong> {pings ? pings.status : '...'}</p>
                         <p><strong>Count:</strong> {pings ? (pings.data ? pings.data.length : '0') : '0'}</p>
                         {

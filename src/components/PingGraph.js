@@ -4,6 +4,7 @@ import {Sparklines, SparklinesLine} from "react-sparklines";
 class PingGraph extends Component {
 
     render() {
+        // Compute parameters
         let max = this.props.max || 150;
         let min = this.props.min || 0;
         let width = this.props.width || 250;
@@ -15,26 +16,26 @@ class PingGraph extends Component {
             width: width + widthUnit,
         };
 
+        // Reverse data if passed
         let data = [];
         if (this.props.data) {
             data = this.props.data.slice().reverse();
         }
 
-        return (<div>
-            <Sparklines
-                min={min}
-                max={max}
-                style={style}
-                width={width}
-                height={height}
-                data={data}
-            >
-                <SparklinesLine/>
-            </Sparklines>
-        </div>)
-
-
-            ;
+        return (
+            <div>
+                <Sparklines
+                    min={min}
+                    max={max}
+                    style={style}
+                    width={width}
+                    height={height}
+                    data={data}
+                >
+                    <SparklinesLine/>
+                </Sparklines>
+            </div>
+        );
     }
 }
 

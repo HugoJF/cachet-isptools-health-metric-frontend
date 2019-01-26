@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import NumberDirection from "./NumberDirection";
 import {Link} from "react-router-dom";
+import PingWithJitter from "./PingWithJitter";
+import {NumberDirection} from "../containers/NumberDirectionContainer";
 
 class ServerTableRow extends Component {
 
@@ -9,11 +10,11 @@ class ServerTableRow extends Component {
 
         if (server) {
             if (server.abnormal_jitter) {
-                return 'Jitter';
+                return 'JITTER';
             } else if (server.abnormal_ping) {
-                return 'High ping';
+                return 'PING';
             } else if (server.abnormal_loss) {
-                return 'High packet loss';
+                return 'LOSS';
             }
         } else {
             return 'Missing server information';
@@ -45,7 +46,7 @@ class ServerTableRow extends Component {
     status() {
         let server = this.props.server;
 
-        return server.status ? 'success' : 'danger';
+        return server.status ? 'bg-success' : 'bg-danger';
     }
 
     statusText() {
@@ -70,14 +71,12 @@ class ServerTableRow extends Component {
                     </td>
                     <td>
                         <NumberDirection value={server.ping}/>
-                        <strong>{parseFloat(server.ping).toFixed(2)}ms</strong>
-                        <span> ± </span>
-                        <small>{parseFloat(server.jitter).toFixed(2)}</small>
+                        <PingWithJitter server={server} />
                         <NumberDirection value={server.jitter}/>
                     </td>
                     <td>
                         <NumberDirection value={server.loss}/>
-                        <strong>{parseFloat(server.loss * 100).toFixed(1)}%</strong>
+                        <strong className={server.abnormal_loss ? 'danger' : ''}>{parseFloat(server.loss * 100).toFixed(1)}%</strong>
                         <small> ({server.pings} attempts)</small>
                     </td>
                     <td title={this.abnormalReason()}>{server.abnormal ? '⛔' : '✅'}</td>

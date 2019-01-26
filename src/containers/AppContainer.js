@@ -13,6 +13,8 @@ export const App = connect(
         data: state.app.data,
         loading: state.app.loading,
         status: state.app.status,
+        serverProblems: state.app.serverProblems,
+        serversWithProblems: state.app.serversWithProblems,
     }),
     mapDispatchToProps
 )(AppComponent);

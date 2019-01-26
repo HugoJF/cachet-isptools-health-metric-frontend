@@ -7,12 +7,13 @@ class PingGraph extends Component {
         let max = this.props.max || 150;
         let min = this.props.min || 0;
         let width = this.props.width || 250;
+        let widthUnit = this.props.widthUnit || 'px';
         let height = this.props.height || 50;
+        let heightUnit = this.props.heightUnit || 'px';
         let style = {
-            height: height + 'px',
-            width: width + 'px',
+            height: height + heightUnit,
+            width: width + widthUnit,
         };
-
 
         let data = [];
         if (this.props.data) {

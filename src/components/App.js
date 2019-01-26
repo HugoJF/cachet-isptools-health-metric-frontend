@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import '../styles/App.css';
 import ServerTable from "./ServerTable";
 import NumberDirection from "./NumberDirection";
+import PingGraph from "./PingGraph";
 
 class App extends Component {
     componentWillMount() {
@@ -25,6 +26,14 @@ class App extends Component {
         return res;
     }
 
+    serverCount() {
+        if (this.props.data) {
+            return this.props.data.length;
+        } else {
+            return 0;
+        }
+    }
+
     componentDidMount() {
         this.timer = setInterval(() => {
             this.loadData();
@@ -42,9 +51,20 @@ class App extends Component {
                 <p>Status: {this.props.status}</p>
                 <button onClick={this.loadData.bind(this)}>Refresh</button>
 
-                <h3>Servers with problems: {this.serversWithProblems()} <NumberDirection value={this.serversWithProblems()}/></h3>
+                <h3>Servers with problems: {this.props.serversWithProblems}
+                    <NumberDirection value={this.props.serversWithProblems}/>
+                </h3>
 
-                <ServerTable loading={this.props.loading} servers={this.props.data}></ServerTable>
+                <p>
+                    <PingGraph
+                        min={0}
+                        max={this.serverCount()}
+                        height={150}
+                        width={1500}
+                        data={this.props.serverProblems}
+                    />
+                </p>
+                <ServerTable loading={this.props.loading} servers={this.props.data} />
             </div>
         );
     }

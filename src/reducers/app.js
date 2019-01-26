@@ -11,10 +11,29 @@ const app = (state = [], action) => {
                 }
             };
         case types.SERVERS_GET_REQUEST_SUCCESS:
+            let serverProblems = state.serverProblems || [];
+            let serversWithProblems = undefined;
+
+            // Push current servers with problems
+            if (state.data) {
+                serversWithProblems = state.data.reduce((acc, sv) => {
+                    return acc + (sv.abnormal ? 1 : 0);
+                }, 0);
+
+                serverProblems.unshift(serversWithProblems);
+            }
+
+            // Regulate problem history
+            if (serverProblems.length > 100) {
+                serverProblems.pop()
+            }
+
             return {
                 ...state,
                 ...{
                     data: action.data,
+                    serversWithProblems: serversWithProblems,
+                    serverProblems: serverProblems,
                     loading: false,
                     status: 'Success',
                 }

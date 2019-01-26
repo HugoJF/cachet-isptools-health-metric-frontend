@@ -335,7 +335,8 @@ module.exports = function (webpackEnv) {
                                     'babel-preset-react-app/webpack-overrides'
                                 ),
                                 presets: [
-                                    '@babel/react', '@babel/preset-env'
+                                    '@babel/preset-env',
+                                    '@babel/react'
                                 ],
                                 plugins: [
                                     [

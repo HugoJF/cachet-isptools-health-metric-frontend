@@ -15,6 +15,9 @@ export const App = connect(
         status: state.app.status,
         serverProblems: state.app.serverProblems,
         serversWithProblems: state.app.serversWithProblems,
+        serversWithPingProblems: state.app.serversWithPingProblems,
+        serversWithJitterProblems: state.app.serversWithJitterProblems,
+        serversWithLossProblems: state.app.serversWithLossProblems,
     }),
     mapDispatchToProps
 )(AppComponent);

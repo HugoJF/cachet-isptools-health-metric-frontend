@@ -4,6 +4,7 @@ import './index.css';
 import {App} from './containers/AppContainer';
 import {Server} from "./containers/ServerContainer";
 import {Provider} from 'react-redux';
+import Graphs from "./components/Graphs";
 import thunk from 'redux-thunk';
 import {createStore, applyMiddleware} from 'redux';
 import rootReducer from './reducers';
@@ -19,6 +20,7 @@ ReactDOM.render(
         <BrowserRouter>
             <Switch>
                 <Route path='/server/:id' component={Server} />
+                <Route path='/graphs' component={Graphs}/>
                 <Route component={App}/>
             </Switch>
         </BrowserRouter>

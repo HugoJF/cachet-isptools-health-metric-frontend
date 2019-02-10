@@ -3,6 +3,7 @@ import '../styles/App.css';
 import ServerTable from "./ServerTable";
 import PingGraph from "./PingGraph";
 import {NumberDirection} from "../containers/NumberDirectionContainer";
+import {Link} from "react-router-dom";
 
 class App extends Component {
     componentWillMount() {
@@ -50,12 +51,28 @@ class App extends Component {
                 {/* Header  */}
                 <h1>Server Health Monitoring Dashboard</h1>
                 <p>Status: {this.props.status}</p>
+                <p><Link to={'/graphs'}>Graphs</Link></p>
                 <button onClick={this.loadData.bind(this)}>Refresh</button>
 
                 {/* Abnormal server counter */}
                 <h3>Servers with problems: {this.props.serversWithProblems}
                     <NumberDirection value={this.props.serversWithProblems}/>
                 </h3>
+
+                {/* Ping problems counter */}
+                <h4>Servers with ping problems: {this.props.serversWithPingProblems}
+                    <NumberDirection value={this.props.serversWithPingProblems}/>
+                </h4>
+
+                {/* Jitter problems counter */}
+                <h4>Servers with jitter problems: {this.props.serversWithJitterProblems}
+                    <NumberDirection value={this.props.serversWithJitterProblems}/>
+                </h4>
+
+                {/* Loss problems counter */}
+                <h4>Servers with loss problems: {this.props.serversWithLossProblems}
+                    <NumberDirection value={this.props.serversWithLossProblems}/>
+                </h4>
 
                 {/* Abnormal servers history */}
                 <p>
@@ -69,7 +86,7 @@ class App extends Component {
                 </p>
 
                 {/* Server information table */}
-                <ServerTable loading={this.props.loading} servers={this.props.data} />
+                <ServerTable loading={this.props.loading} servers={this.props.data}/>
             </div>
         );
     }

@@ -13,11 +13,26 @@ const app = (state = [], action) => {
         case types.SERVERS_GET_REQUEST_SUCCESS:
             let serverProblems = state.serverProblems || [];
             let serversWithProblems = undefined;
+            let serversWithPingProblems = undefined;
+            let serversWithJitterProblems = undefined;
+            let serversWithLossProblems = undefined;
 
             // Push current servers with problems
             if (state.data) {
                 serversWithProblems = state.data.reduce((acc, sv) => {
                     return acc + (sv.abnormal ? 1 : 0);
+                }, 0);
+
+                serversWithPingProblems = state.data.reduce((acc, sv) => {
+                    return acc + (sv.abnormal_ping ? 1 : 0);
+                }, 0);
+
+                serversWithJitterProblems = state.data.reduce((acc, sv) => {
+                    return acc + (sv.abnormal_jitter ? 1 : 0);
+                }, 0);
+
+                serversWithLossProblems = state.data.reduce((acc, sv) => {
+                    return acc + (sv.abnormal_loss ? 1 : 0);
                 }, 0);
 
                 serverProblems.unshift(serversWithProblems);
@@ -34,6 +49,9 @@ const app = (state = [], action) => {
                     time: (new Date()).getTime(),
                     data: action.data,
                     serversWithProblems: serversWithProblems,
+                    serversWithPingProblems: serversWithPingProblems,
+                    serversWithJitterProblems: serversWithJitterProblems,
+                    serversWithLossProblems: serversWithLossProblems,
                     serverProblems: serverProblems,
                     loading: false,
                     status: 'Success',

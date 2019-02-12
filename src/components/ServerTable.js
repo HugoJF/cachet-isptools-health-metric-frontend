@@ -7,8 +7,10 @@ class ServerTable extends Component {
     buildTable() {
         if (this.props.servers) {
             return (
-                this.props.servers.map((server) => (
-                    <ServerTableRow server={server} colSpan={7}/>
+                this.props.servers.filter((server) => (
+                    server.online
+                )).map((server) => (
+                    <ServerTableRow key={server.url} server={server} colSpan={7}/>
                 ))
             )
         } else {
@@ -28,10 +30,10 @@ class ServerTable extends Component {
                 <tr>
                     <th>Status</th>
                     <th>Name</th>
-                    <th>URL</th>
                     <th>Ping (jitter)</th>
                     <th>Loss</th>
                     <th>State</th>
+                    <th>Last Seen</th>
                     <th>Actions</th>
                 </tr>
                 </thead>

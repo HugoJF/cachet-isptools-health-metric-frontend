@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 import PingWithJitter from "./PingWithJitter";
 import {NumberDirection} from "../containers/NumberDirectionContainer";
+import LastSeen from "./LastSeen";
 
 class ServerTableRow extends Component {
 
@@ -46,13 +47,26 @@ class ServerTableRow extends Component {
     status() {
         let server = this.props.server;
 
-        return server.status ? 'bg-success' : 'bg-danger';
+        return server.online ? 'bg-success' : 'bg-danger';
     }
 
     statusText() {
         let server = this.props.server;
 
-        return server.status ? 'Online' : 'Offline';
+        return server.online ? 'Online' : 'Offline';
+    }
+
+    pingRate() {
+        return Math.round(1 / this.props.server.ping_rate * 10) / 10;
+    }
+
+    lastSeen() {
+        let now = new Date().getTime() / 1000;
+        let check = this.props.server.last_check;
+
+        let delta = now - check;
+
+        return Math.round(delta)
     }
 
     render() {
@@ -64,22 +78,33 @@ class ServerTableRow extends Component {
         if (server) {
             return (
                 <tr style={this.flash || {}}>
+                    {/* Status */}
                     <td className={this.status()}>{this.statusText()}</td>
+
+                    {/* Server Name */}
                     <td dangerouslySetInnerHTML={{__html: server.name}}></td>
-                    <td>
-                        <code>{server.url}</code>
-                    </td>
+
+                    {/* Ping statistics */}
                     <td>
                         <NumberDirection value={server.ping}/>
-                        <PingWithJitter server={server} />
+                        <PingWithJitter server={server}/>
                         <NumberDirection value={server.jitter}/>
                     </td>
+
+                    {/* Loss */}
                     <td>
                         <NumberDirection value={server.loss}/>
                         <strong className={server.abnormal_loss ? 'danger' : ''}>{parseFloat(server.loss * 100).toFixed(1)}%</strong>
-                        <small> ({server.pings} attempts)</small>
+                        <small title={this.pingRate() + ' pings/second'}> ({server.pings} attempts)</small>
                     </td>
+
+                    {/* State */}
                     <td title={this.abnormalReason()}>{server.abnormal ? '⛔' : '✅'}</td>
+
+                    {/* Last Seen */}
+                    <td><LastSeen time={server.last_check * 1000}/></td>
+
+                    {/* Actions */}
                     <td>
                         <Link to={'server/' + server.id}>Details</Link>
                     </td>

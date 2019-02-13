@@ -17,48 +17,54 @@ class Server extends Component {
         return parseInt(this.props.match.params.id);
     }
 
+    graphUrl() {
+        let name = this.getFilename();
+
+        if (name) {
+            return 'http://cachet-health-metric.denerdtv.com/graphs/' + name + '.png?' + new Date().getTime();
+        } else {
+            return '#';
+        }
+    }
+
+    getFilename() {
+        let server = this.getServer();
+
+        if (server) {
+            return server.url.replace(/[^A-Za-z0-9]/g, '_');
+        } else {
+            return undefined;
+        }
+    }
+
     componentWillMount() {
         if (!this.props.servers) {
             this.loadData();
         }
+    }
 
-        if (!this.props.pings || !this.props.pings[this.getId()] || this.props.pings[this.getId()].length === 0) {
-            this.requestPings();
+
+    getServer() {
+        let id = this.getId();
+        let server = this.props.servers.filter((sv) => (id === parseInt(sv.id)));
+
+        if (server.length === 1) {
+            server = server[0];
+        } else {
+            console.log('Could not find server data');
+            server = undefined;
         }
-    }
 
-    componentDidMount() {
-        this.timer = setInterval(() => {
-            this.requestPings()
-        }, 5000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timer);
+        return server;
     }
 
     render() {
         let server = undefined;
-        let pings = [];
 
         if (this.props.servers) {
-            let id = this.getId();
-
-            server = this.props.servers.filter((sv) => (id === parseInt(sv.id)));
-
-            if (server.length === 1) {
-                server = server[0];
-            } else {
-                console.log('Could not find server data');
-                server = undefined;
-            }
-
-            if (this.props.pings) {
-                pings = this.props.pings[id];
-            }
+            server = this.getServer();
         }
 
-        console.log(pings);
         return (
             <div style={{textAlign: 'center'}}>
                 {server !== undefined ?
@@ -76,24 +82,11 @@ class Server extends Component {
                         </p>
 
                         {/* Ping information and history */}
-                        <h2>Pings</h2>
-                        <p><strong>Status:</strong> {pings ? pings.status : '...'}</p>
-                        <p><strong>Count:</strong> {pings ? (pings.data ? pings.data.length : '0') : '0'}</p>
-                        {
-                            (pings) ?
-                                <PingGraph
-                                    min={0}
-                                    max={100}
-                                    width={250}
-                                    height={50}
-                                    data={pings.data}
-                                />
-                                :
-                                <p>missing data</p>
-                        }
+                        <h2>Graph</h2>
+                        <img src={this.graphUrl()}/>
                     </div>
                     :
-                    <p>Could not find server information</p>
+                    <p>Could not find server information or loading...</p>
                 }
             </div>
         );

@@ -102,7 +102,7 @@ class ServerTableRow extends Component {
                     <td title={this.abnormalReason()}>{server.abnormal ? '⛔' : '✅'}</td>
 
                     {/* Last Seen */}
-                    <td><LastSeen time={server.last_check * 1000}/></td>
+                    <td><LastSeen time={server.last_ping * 1000}/></td>
 
                     {/* Actions */}
                     <td>
